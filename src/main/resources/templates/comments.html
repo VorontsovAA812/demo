@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Комментарии</title>
+</head>
+<body>
+<h1>Комментарии к посту "<span th:text="${post.title}"></span>"</h1>
+<p>Текущий пользователь: <span th:text="${currentUser}"></span></p>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Content</th>
+        <th>User</th>
+    </tr>
+    <tr th:each="c : ${comments}">
+        <td th:text="${c.commentId}"></td>
+        <td th:text="${c.content}"></td>
+        <td th:text="${c.user != null ? c.user.username : 'N/A'}"></td>
+    </tr>
+</table>
+
+<h2>Добавить новый комментарий</h2>
+<form th:action="@{/comments/save}" method="post" th:object="${newComment}">
+    <input type="hidden" name="postId" th:value="${post.postId}" />
+    <label>Content: <textarea th:field="*{content}" required></textarea></label><br/>
+    <input type="submit" value="Сохранить"/>
+</form>
+
+<br/>
+<a th:href="@{/posts}">Назад к постам</a>
+</body>
+</html>

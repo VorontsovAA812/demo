@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Темы</title>
+</head>
+<body>
+<h1>Список тем</h1>
+<table border="1">
+    <tr>
+        <th>Theme Name</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="theme : ${themes}">
+        <td th:text="${theme.themeName}"></td>
+        <td>
+            <a th:href="@{/themes/delete/{themeName}(themeName=${theme.themeName})}">Удалить</a>
+            <!-- Ссылка для удаления темы вместе с постами -->
+            <a th:href="@{/themes/delete-with-posts/{themeName}(themeName=${theme.themeName})}"
+               style="margin-left:10px; color:red;">
+                Удалить тему и все посты
+            </a>
+        </td>
+    </tr>
+</table>
+
+<h2>Добавить новую тему</h2>
+<form th:action="@{/themes/save}" method="post" th:object="${newTheme}">
+    <label>Theme Name: <input type="text" th:field="*{themeName}" required /></label><br/>
+    <label>Creator:
+        <select name="creatorUsername">
+            <option value="">Нет</option>
+            <option th:each="u: ${users}" th:value="${u.username}" th:text="${u.username}"></option>
+        </select>
+    </label><br/>
+    <input type="submit" value="Сохранить"/>
+</form>
+
+<br/>
+<a href="/">На главную</a>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пользователи</title>
+</head>
+<body>
+<h1>Список пользователей</h1>
+<table border="1">
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td>
+            <form th:action="@{/users/update-email}" method="post" style="display:inline;">
+                <input type="hidden" name="username" th:value="${user.username}" />
+                <input type="email" name="newEmail" placeholder="Новый email" required />
+                <input type="submit" value="Обновить email" />
+            </form>
+            <a th:href="@{/users/delete/{username}(username=${user.username})}">Удалить</a>
+            <!-- Ссылка для удаления пользователя вместе со всеми его постами и комментариями -->
+            <a th:href="@{/users/delete-with-data/{username}(username=${user.username})}"
+               style="margin-left:10px; color:red;">
+                Удалить с постами и комментариями
+            </a>
+        </td>
+    </tr>
+</table>
+
+<h2>Добавить нового пользователя</h2>
+<form th:action="@{/users/save}" method="post" th:object="${newUser}">
+    <label>Username: <input type="text" th:field="*{username}" required /></label><br/>
+    <label>Email: <input type="email" th:field="*{email}" required /></label><br/>
+    <label>Password: <input type="password" th:field="*{password}" required /></label><br/>
+    <input type="submit" value="Сохранить"/>
+</form>
+
+<br/>
+<a href="/">На главную</a>
+</body>
+</html>

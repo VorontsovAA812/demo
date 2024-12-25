@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Посты</title>
+</head>
+<body>
+<h1>Список постов для темы: <span th:text="${currentTheme}"></span></h1>
+<p>Текущий пользователь: <span th:text="${currentUser}"></span></p>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>User</th>
+        <th>Theme</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="p: ${posts}">
+        <td th:text="${p.postId}"></td>
+        <td th:text="${p.title}"></td>
+        <td th:text="${p.content}"></td>
+        <td th:text="${p.user != null ? p.user.username : 'N/A'}"></td>
+        <td th:text="${p.theme.themeName}"></td>
+        <td>
+            <a th:href="@{/posts/{id}/comments(id=${p.postId})}">Комментарии</a>
+        </td>
+    </tr>
+</table>
+
+<h2>Добавить новый пост</h2>
+<form th:action="@{/posts/save}" method="post" th:object="${newPost}">
+    <label>Title: <input type="text" th:field="*{title}" required/></label><br/>
+    <label>Content: <textarea th:field="*{content}" required></textarea></label><br/>
+    <input type="submit" value="Сохранить"/>
+</form>
+
+<hr/>
+
+<h2>Обновить тему и содержимое поста</h2>
+<form th:action="@{/posts/update-post}" method="post">
+    <label>Post ID: <input type="number" name="postId" required/></label><br/>
+    <label>Новая тема: <input type="text" name="newTheme" placeholder="Technology" required/></label><br/>
+    <label>Новое содержимое: <textarea name="newContent" required>Обновленное содержимое поста о технологиях.</textarea></label><br/>
+    <input type="submit" value="Обновить пост"/>
+</form>
+
+<br/>
+<a href="/">На главную</a>
+</body>
+</html>
